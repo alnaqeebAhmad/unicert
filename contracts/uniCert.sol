@@ -116,5 +116,6 @@ contract UniCert {
         zertifikate[_id].gueltig = false;
         emit ZertifikatWiderrufen(_id);
 
+
     }
 }
