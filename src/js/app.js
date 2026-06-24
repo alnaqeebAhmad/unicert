@@ -70,7 +70,8 @@ async function ausstellen() {
         showStatus('info', 'Transaktion wird gesendet… MetaMask bestätigen.');
 
         const tx = await contract.zertifikatAusstellen(
-            name, matrikel, studgang, abschluss, noteX100
+            name, matrikel, studgang, abschluss, noteX100,
+            { gasLimit: 300000}
         );
 
         showStatus('info', `Warte auf Bestätigung… TX: ${tx.hash.slice(0,10)}...`);
