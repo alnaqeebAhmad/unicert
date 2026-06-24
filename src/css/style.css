@@ -1,0 +1,96 @@
+/* ── Reset & Basis ──────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f0f1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+header {
+    background: #1a1a2e;
+    border-bottom: 3px solid #FF9100;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+header h1 { color: #FF9100; font-size: 1.5rem; }
+#wallet-info { font-size: 0.85rem; color: #8892a4; }
+
+/* ── Cards ──────────────────────────────────────────── */
+.card {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255,145,0,0.2);
+}
+
+.card h2 {
+    color: #FF9100;
+    font-size: 1rem;
+    margin-bottom: 16px;
+}
+
+/* ── Formular ───────────────────────────────────────── */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+label { font-size: 0.8rem; color: #8892a4; display: block; margin-bottom: 4px; }
+
+input {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #FF9100;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 8px;
+}
+
+.btn-primary { background: #FF9100; color: #fff; }
+.btn-danger  { background: #ff5252; color: #fff; }
+.btn-connect { background: #FF9100; color: #fff; }
+
+.btn:hover { opacity: 0.85; }
+
+/* ── Status-Box ─────────────────────────────────────── */
+.status {
+    display: none;
+    padding: 14px;
+    border-radius: 8px;
+    margin-top: 16px;
+    white-space: pre-line;
+    font-size: 0.9rem;
+}
+
+.status.success { background: rgba(0,230,118,0.1); border: 1px solid #00e676; color: #00e676; }
+.status.error   { background: rgba(255,82,82,0.1);  border: 1px solid #ff5252; color: #ff5252; }
+.status.info    { background: rgba(255,145,0,0.1);  border: 1px solid #FF9100; color: #FF9100; }

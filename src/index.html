@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>UniCert – Blockchain Zertifikate</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>🎓 UniCert</h1>
+    <div>
+        <button class="btn btn-connect" id="btn-connect">🦊 MetaMask verbinden</button>
+        <div id="wallet-info">Nicht verbunden</div>
+    </div>
+</header>
+
+<main>
+
+    <!-- Zertifikat ausstellen -->
+    <div class="card">
+        <h2>🏛️ Zertifikat ausstellen (Hochschule)</h2>
+        <div class="form-grid">
+            <div>
+                <label>Name des Studierenden</label>
+                <input id="inp-name" type="text" placeholder="z.B. Ahmed Al-Naqeeb" />
+            </div>
+            <div>
+                <label>Matrikelnummer</label>
+                <input id="inp-matrikel" type="text" placeholder="z.B. 123456" />
+            </div>
+            <div>
+                <label>Studiengang</label>
+                <input id="inp-studiengang" type="text" placeholder="z.B. Angewandte Informatik" />
+            </div>
+            <div>
+                <label>Abschluss</label>
+                <input id="inp-abschluss" type="text" placeholder="z.B. Bachelor of Science" />
+            </div>
+            <div>
+                <label>Abschlussnote</label>
+                <input id="inp-note" type="number" placeholder="z.B. 1.7"
+                       min="1.0" max="4.0" step="0.1" />
+            </div>
+        </div>
+        <button class="btn btn-primary" id="btn-ausstellen">✅ Ausstellen</button>
+        <div id="status" class="status"></div>
+    </div>
+
+    <!-- Verifizieren & Widerrufen -->
+    <div class="card">
+        <h2>🔍 Zertifikat verifizieren / widerrufen</h2>
+        <div>
+            <label>Zertifikat-ID (0x…)</label>
+            <input id="inp-zert-id" type="text" placeholder="0x..."
+                   style="margin-bottom:12px"/>
+        </div>
+        <button class="btn btn-primary" id="btn-verifizieren">🔐 Verifizieren</button>
+        <button class="btn btn-danger"  id="btn-widerrufen">🚫 Widerrufen</button>
+    </div>
+
+</main>
+
+<footer style="text-align:center;color:#8892a4;font-size:0.8rem;margin-top:40px;">
+    UniCert – Assignment 5 – Bitcoin, Blockchain & Cryptocurrencies –
+    Prof. Hendrik Speck – Hochschule Kaiserslautern – Ahmed Al-Naqeeb
+</footer>
+
+<script src="js/abi.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
