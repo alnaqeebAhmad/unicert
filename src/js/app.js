@@ -123,7 +123,7 @@ async function verifizieren() {
             `Studiengang:${z[2]}\n` +
             `Abschluss:  ${z[3]}\n` +
             `Note:       ${note}\n` +
-            `Ausgestellt:${datum}`
+            `Ausgestellt: ${datum}`
         );
 
     } catch (err) {
