@@ -74,11 +74,22 @@ async function ausstellen() {
         );
 
         showStatus('info', `Warte auf Bestätigung… TX: ${tx.hash.slice(0,10)}...`);
-        const receipt = await tx.wait(); // wartet bis Block gemined
+        const receipt = await tx.wait();    // wartet bis Block gemined
 
         // read Certificate-ID from Event
-        const event = receipt.events?.find(e => e.event === 'ZertifikatAusgestellt');
-        const zertId = event?.args?.zertifikatId;
+        /*Old Bug const event = receipt.events?.find(e => e.event === 'ZertifikatAusgestellt');
+        const zertId = event?.args?.zertifikatId; */
+        /*Correction: receipt.events works only with Truffle with MetaMask/Browser we must parse Logs manually with iface.parseLog(). */
+        const iface = new ethers.utils.Interface(UNICERT_ABI);
+        let zertId = null;
+        for (const log of receipt.logs) {
+            try {
+                const parsed = iface.parseLog(log);
+                if (parsed.name === 'ZertifikatAusgestellt') {
+                    zertId = parsed.args[0];
+                }
+            } catch {}
+        }
 
         showStatus('success',
             `✅ Zertifikat ausgestellt!\nID: ${zertId}\nBlock: #${receipt.blockNumber}`
