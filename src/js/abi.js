@@ -11,5 +11,5 @@ const UNICERT_ABI = [
     "event ZertifikatAusgestellt(bytes32 indexed,string,string,uint256)",
     "event ZertifikatWiderrufen(bytes32 indexed)"
 ];
-
+// Sepolia Testnet Contract Address
 const CONTRACT_ADDRESS = "0xAE4512CD58d831566463e9875398c12F54Ab3d34";
