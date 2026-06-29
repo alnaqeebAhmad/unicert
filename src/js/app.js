@@ -131,17 +131,21 @@ async function ausstellen() {
     }
 }
 
-// Zertifikat verifizieren (öffentlich, kein Gas)
+// Zertifikat verifizieren (öffentlich, kein Gas, kein MetaMask nötig)
 async function verifizieren() {
-    if (!contract) { showStatus('error', 'Bitte zuerst Wallet verbinden!'); return; }
-
     const id = document.getElementById('inp-zert-id').value.trim();
     if (!id) { showStatus('error', 'Bitte Zertifikat-ID eingeben!'); return; }
 
     try {
-        const z     = await contract.zertifikatVerifizieren(id);
-        const note  = (z[4].toNumber() / 100).toFixed(1);
-        const datum = new Date(z[5].toNumber() * 1000).toLocaleDateString('de-DE');
+        // Funktioniert mit UND ohne MetaMask
+        const readProvider = contract
+            ? provider
+            : new ethers.providers.JsonRpcProvider('https://rpc.sepolia.org');
+        const readContract = new ethers.Contract(CONTRACT_ADDRESS, UNICERT_ABI, readProvider);
+
+        const z      = await readContract.zertifikatVerifizieren(id);
+        const note   = (z[4].toNumber() / 100).toFixed(1);
+        const datum  = new Date(z[5].toNumber() * 1000).toLocaleDateString('de-DE');
         const status = z[6] ? '✅ GÜLTIG' : '❌ WIDERRUFEN';
 
         showStatus('success',
