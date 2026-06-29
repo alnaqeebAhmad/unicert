@@ -74,7 +74,12 @@ input:focus {
     font-size: 0.9rem;
     margin-right: 8px;
 }
-
+.btn-secondary {
+    background: rgba(255,145,0,0.15);
+    color: #FF9100;
+    border: 1px solid #FF9100;
+}
+.btn-sm { padding: 6px 14px; font-size: 0.8rem; }
 .btn-primary { background: #FF9100; color: #fff; }
 .btn-danger  { background: #ff5252; color: #fff; }
 .btn-connect { background: #FF9100; color: #fff; }

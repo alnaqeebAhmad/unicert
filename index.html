@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- PDF Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- QR-Code Scanner -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
 
@@ -60,6 +62,17 @@
             <label>Zertifikat-ID (0x…)</label>
             <input id="inp-zert-id" type="text" placeholder="0x..."
                    style="margin-bottom:12px"/>
+            <!-- QR-Scanner Button -->
+            <button class="btn btn-secondary" id="btn-scan" onclick="toggleScanner()">
+                📷 QR-Code scannen
+            </button>
+
+            <!-- Scanner Modal -->
+            <div id="scanner-modal" style="display:none; margin-top:16px;">
+                <div id="qr-reader" style="width:100%; border-radius:8px; overflow:hidden;"></div>
+                <button class="btn btn-danger btn-sm" style="margin-top:8px;"
+                        onclick="stopScanner()">Scanner schließen</button>
+            </div>
         </div>
         <button class="btn btn-primary" id="btn-verifizieren">🔐 Verifizieren</button>
         <button class="btn btn-danger"  id="btn-widerrufen">🚫 Widerrufen</button>
