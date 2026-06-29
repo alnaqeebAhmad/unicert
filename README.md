@@ -56,16 +56,23 @@ manipulationssicher.
 
 ---
 
-## QR-Code & PDF Verifizierung
+## QR Code and PDF Verification
 
-Nach der erfolgreichen Ausstellung eines Zertifikats wird automatisch ein PDF-Dokument generiert und heruntergeladen. Das PDF enthält alle Zertifikatsdaten sowie einen QR-Code, der direkt zur Verifizierung führt.
+After a certificate is successfully issued, a PDF document is automatically
+generated and downloaded. The PDF contains all certificate data as well as
+a QR code for direct verification.
 
-Der QR-Code enthält eine eindeutige Verifikations-URL der folgenden Form:
+**Verification via smartphone:**
+The QR code in the PDF links to a unique verification URL:
+`https://alnaqeebahmad.github.io/unicert?verify=0x...`
 
-https://alnaqeebahmad.github.io/unicert?verify=0x...
+When scanned with a smartphone, the UniCert platform opens automatically
+and verifies the certificate directly from the Ethereum blockchain —
+without MetaMask, without an account, and free of charge.
 
-Wird der QR-Code mit einem Smartphone oder Laptop gescannt, öffnet sich die UniCert-Plattform automatisch und verifiziert das Zertifikat direkt von der Ethereum-Blockchain — ohne MetaMask, ohne Account, kostenlos.
-
+**Verification via laptop:**
+Paste the certificate ID from the PDF into the input field and
+click "Verifizieren" — also works without MetaMask.
 ## Technologie-Stack
 
 | Komponente | Technologie |
@@ -325,13 +332,21 @@ their own account. The result is immediate and tamper-proof.
 
 ## QR Code and PDF Verification
 
-After a certificate is successfully issued, a PDF document is automatically generated and downloaded. The PDF contains all certificate data as well as a QR code that links directly to the verification page.
+After a certificate is successfully issued, a PDF document is automatically
+generated and downloaded. The PDF contains all certificate data as well as
+a QR code for direct verification.
 
-The QR code encodes a unique verification URL of the following form:
+**Verification via smartphone:**
+The QR code in the PDF links to a unique verification URL:
+`https://alnaqeebahmad.github.io/unicert?verify=0x...`
 
-https://alnaqeebahmad.github.io/unicert?verify=0x...
+When scanned with a smartphone, the UniCert platform opens automatically
+and verifies the certificate directly from the Ethereum blockchain —
+without MetaMask, without an account, and free of charge.
 
-When the QR code is scanned with a smartphone or laptop, the UniCert platform opens automatically and verifies the certificate directly from the Ethereum blockchain — without MetaMask, without an account, and free of charge.
+**Verification via laptop:**
+Paste the certificate ID from the PDF into the input field and
+click "Verifizieren" — also works without MetaMask.
 
 ## Technology Stack
 
