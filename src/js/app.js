@@ -9,12 +9,45 @@ let signer   = null;
 let contract = null;
 let account  = null;
 
-// App starts when DOM loaded
+// Auto-Verifizierung via URL-Parameter
+// Falls URL ?verify=0x... enthält, wird sofort verifiziert
 window.addEventListener('DOMContentLoaded', () => {
+    // Buttons verbinden
     document.getElementById('btn-connect').addEventListener('click', connectWallet);
     document.getElementById('btn-ausstellen').addEventListener('click', ausstellen);
     document.getElementById('btn-verifizieren').addEventListener('click', verifizieren);
     document.getElementById('btn-widerrufen').addEventListener('click', widerrufen);
+
+    // Auto-Verifizierung via URL-Parameter
+    const params = new URLSearchParams(window.location.search);
+    const autoVerifyId = params.get('verify');
+    if (autoVerifyId) {
+        document.getElementById('inp-zert-id').value = autoVerifyId;
+        setTimeout(async () => {
+            const readProvider = new ethers.providers.JsonRpcProvider(
+                //'https://ethereum-sepolia-rpc.publicnode.com'
+                // Neu:
+                'https://rpc.sepolia.org'
+            );
+            const readContract = new ethers.Contract(CONTRACT_ADDRESS, UNICERT_ABI, readProvider);
+            try {
+                const z = await readContract.zertifikatVerifizieren(autoVerifyId);
+                const note  = (z[4].toNumber() / 100).toFixed(1);
+                const datum = new Date(z[5].toNumber() * 1000).toLocaleDateString('de-DE');
+                showStatus('success',
+                    `${z[6] ? '✅ GÜLTIG' : '❌ WIDERRUFEN'}\n` +
+                    `Name:        ${z[0]}\n` +
+                    `Matrikel:    ${z[1]}\n` +
+                    `Studiengang: ${z[2]}\n` +
+                    `Abschluss:   ${z[3]}\n` +
+                    `Note:        ${note}\n` +
+                    `Ausgestellt: ${datum}`
+                );
+            } catch (err) {
+                showStatus('error', 'Zertifikat nicht gefunden: ' + err.message);
+            }
+        }, 1000);
+    }
 });
 // Wallet connection
 async function connectWallet() {
@@ -70,8 +103,8 @@ async function ausstellen() {
         showStatus('info', 'Transaktion wird gesendet… MetaMask bestätigen.');
 
         const tx = await contract.zertifikatAusstellen(
-            name, matrikel, studgang, abschluss, noteX100,
-            { gasLimit: 300000}
+            name, matrikel, studgang, abschluss, noteX100
+
         );
 
         showStatus('info', `Warte auf Bestätigung… TX: ${tx.hash.slice(0,10)}...`);
@@ -94,6 +127,16 @@ async function ausstellen() {
 
         showStatus('success',
             `✅ Zertifikat ausgestellt!\nID: ${zertId}\nBlock: #${receipt.blockNumber}`
+        );
+        // PDF mit QR-Code generieren
+        await generatePDF(
+            zertId,
+            name,
+            matrikel,
+            studgang,
+            abschluss,
+            (note).toFixed(1),
+            receipt.blockNumber
         );
 
     } catch (err) {
@@ -156,4 +199,118 @@ function showStatus(type, message) {
     el.className = `status ${type}`;  // CSS-Klasse: success / error / info
     el.textContent = message;
     el.style.display = 'block';
+}
+
+// PDF + QR-Code generieren
+async function generatePDF(zertId, name, matrikel, studgang, abschluss, note, blockNr) {
+    const verifyUrl = `https://alnaqeebahmad.github.io/unicert?verify=${zertId}`;
+
+    // QR-Code generieren
+    const qrContainer = document.getElementById('qr-container');
+    qrContainer.innerHTML = '';
+    new QRCode(qrContainer, {
+        text: verifyUrl,
+        width: 200,
+        height: 200,
+        correctLevel: QRCode.CorrectLevel.H
+    });
+
+    // Kurz warten bis QR-Code gerendert ist
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const qrCanvas = qrContainer.querySelector('canvas');
+    const qrDataUrl = qrCanvas.toDataURL('image/png');
+
+    // PDF erstellen
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+    // Hintergrund
+    doc.setFillColor(15, 15, 26);
+    doc.rect(0, 0, 210, 297, 'F');
+
+    // Orange Linie oben
+    doc.setDrawColor(255, 145, 0);
+    doc.setLineWidth(2);
+    doc.line(15, 20, 195, 20);
+
+    // Titel
+    doc.setTextColor(255, 145, 0);
+    doc.setFontSize(28);
+    doc.setFont('helvetica', 'bold');
+    doc.text('UniCert', 105, 35, { align: 'center' });
+
+    // Untertitel
+    doc.setTextColor(180, 180, 180);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Blockchain-gesichertes Abschlusszertifikat', 105, 44, { align: 'center' });
+
+    // Orange Linie unter Titel
+    doc.setDrawColor(255, 145, 0);
+    doc.setLineWidth(0.5);
+    doc.line(15, 50, 195, 50);
+
+    // Zertifikat-Daten
+    doc.setTextColor(136, 146, 164);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+
+    const felder = [
+        ['Name',         name],
+        ['Matrikelnummer', matrikel],
+        ['Studiengang',  studgang],
+        ['Abschluss',    abschluss],
+        ['Note',         note],
+        ['Block',        `#${blockNr}`],
+    ];
+
+    let y = 68;
+    felder.forEach(([label, wert]) => {
+        doc.setTextColor(136, 146, 164);
+        doc.setFontSize(9);
+        doc.text(label, 20, y);
+
+        doc.setTextColor(224, 224, 224);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(wert, 20, y + 6);
+        doc.setFont('helvetica', 'normal');
+        y += 18;
+    });
+
+    // Zertifikat-ID
+    doc.setTextColor(136, 146, 164);
+    doc.setFontSize(9);
+    doc.text('Zertifikat-ID (Blockchain)', 20, y);
+    doc.setTextColor(255, 145, 0);
+    doc.setFontSize(7);
+    doc.text(zertId, 20, y + 6);
+    y += 18;
+
+    // Trennlinie
+    doc.setDrawColor(255, 145, 0);
+    doc.setLineWidth(0.3);
+    doc.line(15, y + 5, 195, y + 5);
+
+    // QR-Code
+    doc.addImage(qrDataUrl, 'PNG', 130, 65, 60, 60);
+
+    doc.setTextColor(136, 146, 164);
+    doc.setFontSize(8);
+    doc.text('QR-Code scannen', 160, 130, { align: 'center' });
+    doc.text('zur Verifizierung', 160, 135, { align: 'center' });
+
+    // Footer
+    doc.setDrawColor(255, 145, 0);
+    doc.setLineWidth(0.5);
+    doc.line(15, 275, 195, 275);
+
+    doc.setTextColor(136, 146, 164);
+    doc.setFontSize(8);
+    doc.text('Dieses Zertifikat ist auf der Ethereum Sepolia Blockchain verankert.', 105, 282, { align: 'center' });
+    doc.text('Verifizierung: ' + verifyUrl, 105, 288, { align: 'center' });
+
+    // PDF speichern
+    doc.save(`UniCert_${name.replace(' ', '_')}_${matrikel}.pdf`);
 }

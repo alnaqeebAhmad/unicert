@@ -56,6 +56,16 @@ manipulationssicher.
 
 ---
 
+## QR-Code & PDF Verifizierung
+
+Nach der erfolgreichen Ausstellung eines Zertifikats wird automatisch ein PDF-Dokument generiert und heruntergeladen. Das PDF enthält alle Zertifikatsdaten sowie einen QR-Code, der direkt zur Verifizierung führt.
+
+Der QR-Code enthält eine eindeutige Verifikations-URL der folgenden Form:
+
+https://alnaqeebahmad.github.io/unicert?verify=0x...
+
+Wird der QR-Code mit einem Smartphone oder Laptop gescannt, öffnet sich die UniCert-Plattform automatisch und verifiziert das Zertifikat direkt von der Ethereum-Blockchain — ohne MetaMask, ohne Account, kostenlos.
+
 ## Technologie-Stack
 
 | Komponente | Technologie |
@@ -312,6 +322,16 @@ as a cryptographic proof of their degree. This ID can be shared at any time.
 their own account. The result is immediate and tamper-proof.
 
 ---
+
+## QR Code and PDF Verification
+
+After a certificate is successfully issued, a PDF document is automatically generated and downloaded. The PDF contains all certificate data as well as a QR code that links directly to the verification page.
+
+The QR code encodes a unique verification URL of the following form:
+
+https://alnaqeebahmad.github.io/unicert?verify=0x...
+
+When the QR code is scanned with a smartphone or laptop, the UniCert platform opens automatically and verifies the certificate directly from the Ethereum blockchain — without MetaMask, without an account, and free of charge.
 
 ## Technology Stack
 

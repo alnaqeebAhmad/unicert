@@ -6,6 +6,10 @@
     <title>UniCert – Blockchain Zertifikate</title>
     <link rel="stylesheet" href="src/css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- QR-Code Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- PDF Generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -69,6 +73,7 @@
 
 <script src="src/js/abi.js"></script>
 <script src="src/js/app.js"></script>
-
+<!-- Hidden QR-Code Container (wird nur für PDF genutzt) -->
+<div id="qr-container" style="display:none;"></div>
 </body>
 </html>
