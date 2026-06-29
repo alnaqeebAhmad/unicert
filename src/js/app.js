@@ -24,7 +24,8 @@ window.addEventListener('DOMContentLoaded', () => {
         document.getElementById('inp-zert-id').value = autoVerifyId;
         setTimeout(async () => {
             const readProvider = new ethers.providers.JsonRpcProvider(
-                'https://rpc.sepolia.org'
+                'https://sepolia.drpc.org',
+                { chainId: 11155111, name: 'sepolia' }
             );
             const readContract = new ethers.Contract(CONTRACT_ADDRESS, UNICERT_ABI, readProvider);
             try {
@@ -140,7 +141,8 @@ async function verifizieren() {
         // Funktioniert mit UND ohne MetaMask
         const readProvider = contract
             ? provider
-            : new ethers.providers.JsonRpcProvider('https://rpc.sepolia.org');
+            : new ethers.providers.JsonRpcProvider('https://sepolia.drpc.org',
+                { chainId: 11155111, name: 'sepolia' });
         const readContract = new ethers.Contract(CONTRACT_ADDRESS, UNICERT_ABI, readProvider);
 
         const z      = await readContract.zertifikatVerifizieren(id);
