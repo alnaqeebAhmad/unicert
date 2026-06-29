@@ -8,7 +8,6 @@ let provider     = null;
 let signer       = null;
 let contract     = null;
 let account      = null;
-let html5QrCode  = null; // QR-Scanner Instanz
 
 // App starts when DOM loaded + Auto-Verifizierung via URL-Parameter
 window.addEventListener('DOMContentLoaded', () => {
@@ -285,52 +284,4 @@ async function generatePDF(zertId, name, matrikel, studgang, abschluss, note, bl
     doc.save(`UniCert_${name.replace(' ', '_')}_${matrikel}.pdf`);
 }
 
-// QR-Code Scanner (global)
-async function toggleScanner() {
-    const modal = document.getElementById('scanner-modal');
-    if (modal.style.display === 'none') {
-        modal.style.display = 'block';
-        html5QrCode = new Html5Qrcode('qr-reader');
-        try {
-            await html5QrCode.start(
-                { facingMode: 'environment' },
-                {
-                    fps: 5,
-                    qrbox: { width: 300, height: 300 },
-                    aspectRatio: 1.0
-                },
-                (decodedText) => {
-                    try {
-                        const url    = new URL(decodedText);
-                        const zertId = url.searchParams.get('verify');
-                        if (zertId) {
-                            document.getElementById('inp-zert-id').value = zertId;
-                            stopScanner();
-                            document.getElementById('btn-verifizieren').click();
-                        } else {
-                            showStatus('error', 'Ungültiger QR-Code — kein UniCert Zertifikat.');
-                        }
-                    } catch {
-                        showStatus('error', 'QR-Code konnte nicht gelesen werden.');
-                    }
-                },
-                () => {} // Scan-Fehler ignorieren (normales Verhalten)
-            );
-        } catch (err) {
-            showStatus('error', 'Kamera konnte nicht geöffnet werden: ' + err.message);
-            modal.style.display = 'none';
-        }
-    } else {
-        stopScanner();
-    }
-}
 
-async function stopScanner() {
-    if (html5QrCode) {
-        try {
-            await html5QrCode.stop();
-            html5QrCode = null;
-        } catch {}
-    }
-    document.getElementById('scanner-modal').style.display = 'none';
-}
