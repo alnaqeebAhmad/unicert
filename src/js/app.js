@@ -293,8 +293,12 @@ async function toggleScanner() {
         html5QrCode = new Html5Qrcode('qr-reader');
         try {
             await html5QrCode.start(
-                { facingMode: 'environment' }, // Rückkamera auf Handy, Webcam auf Laptop
-                { fps: 10, qrbox: { width: 250, height: 250 } },
+                { facingMode: 'environment' },
+                {
+                    fps: 5,
+                    qrbox: { width: 300, height: 300 },
+                    aspectRatio: 1.0
+                },
                 (decodedText) => {
                     try {
                         const url    = new URL(decodedText);
